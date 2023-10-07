@@ -13,7 +13,7 @@ LABEL authors="Expliyh"
 
 WORKDIR /app
 
-COPY --from=build /app/build/libs/school-fish.jar app.jar
+COPY --from=build /app/build/libs/school-fish-0.0.1-SNAPSHOT-plain.jarr app.jar
 
 EXPOSE 1145
 
