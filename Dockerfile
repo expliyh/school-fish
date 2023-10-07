@@ -1,0 +1,20 @@
+FROM gradle:8.4.0-jdk20-jammy AS build
+
+WORKDIR /app
+
+COPY ../school-fish-1/src src
+COPY ../school-fish-1/build.gradle build.gradle
+COPY ../school-fish-1/settings.gradle settings.gradle
+
+RUN gradle clean build
+
+FROM amazoncorretto:20-alpine-full
+LABEL authors="Expliyh"
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/school-fish.jar app.jar
+
+EXPOSE 1145
+
+CMD ["java", "-jar", "app.jar"]
