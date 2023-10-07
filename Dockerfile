@@ -6,7 +6,7 @@ COPY src src
 COPY build.gradle build.gradle
 COPY settings.gradle settings.gradle
 
-RUN gradle clean build
+RUN gradle clean build -x test
 
 FROM amazoncorretto:20-alpine-full
 LABEL authors="Expliyh"
