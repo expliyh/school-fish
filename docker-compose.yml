@@ -1,0 +1,28 @@
+version: '3'
+services:
+  school-fish:
+    image: ghcr.io/expliyh/school-fish
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - fish_network
+
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: school-fish
+      MYSQL_USER: your_username
+      MYSQL_PASSWORD: your_password
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+    restart: always
+    networks:
+      - fish_network
+
+networks:
+  fish_network:
+    driver: bridge
