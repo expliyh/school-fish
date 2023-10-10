@@ -4,12 +4,13 @@
 package top.expli.schoolfish;
 
 public class OrderStats {
+    public static final int UNDEFINED = -1;
     public static final int PLACED = 0;
     public static final int PAID = 1;
     public static final int SHIPPED = 2;
     public static final int SIGNED = 3;
     public static final int NOT_REVIEW = 4;
     public static final int DONE = 5;
-    public static final int CLOSED=100;
-    public static final int AFTER_SALE=200;
+    public static final int CLOSED = 100;
+    public static final int AFTER_SALE = 200;
 }
