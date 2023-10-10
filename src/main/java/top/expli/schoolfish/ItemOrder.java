@@ -1,9 +1,19 @@
 package top.expli.schoolfish;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
- * Represents an order for a specific item.
+ * 常规物品的交易订单类.
  */
+@Entity
 public class ItemOrder implements Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private final String sellerID;
     private final String buyerID;
@@ -25,6 +35,13 @@ public class ItemOrder implements Order {
         this.itemID = itemID;
 //        this.itemSnapshot = itemSnapshot;
         this.orderStatus = OrderStats.UNDEFINED;
+    }
+
+    protected ItemOrder() {
+
+        this.sellerID = "@Undef";
+        this.buyerID = "@Undef";
+        this.itemID = "@Undef";
     }
 
     /**

@@ -1,6 +1,8 @@
 package top.expli.schoolfish;
 
-
+/**
+ * 订单接口
+ */
 public interface Order {
     /**
      * Get seller's UserID.
