@@ -11,6 +11,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ApiController {
+    /**
+     * 下订单的路由，返回字符串形式的订单号.
+     * @param itemID 与订单关联的物品的ID
+     * @param buyerID 买家的UID
+     * @param sellerID 卖家的UID
+     * @param token 当前登录用户的 access_token 用于鉴权
+     * @return 字符串形式的订单号
+     */
     @PostMapping("/api/place_order")
     public String placeOrderController(@RequestParam String itemID,
                                        @RequestParam String buyerID,

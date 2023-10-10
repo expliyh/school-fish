@@ -8,6 +8,14 @@ import java.util.HashMap;
 public class Payments {
     private static HashMap<String, Payment> payments;
 
+    /**
+     * 发起支付。
+     * @param orderID 本平台的订单号
+     * @return 支付平台的订单号
+     */
+    public String startPayment(String orderID){
+        return "";
+    }
 }
 
 class Payment {
