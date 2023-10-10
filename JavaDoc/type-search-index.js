@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"top.expli.schoolfish","l":"ItemOrder"},{"p":"top.expli.schoolfish","l":"Order"},{"p":"top.expli.schoolfish","l":"OrderStats"},{"p":"top.expli.schoolfish","l":"SchoolFishApplication"},{"l":"所有类和接口","u":"allclasses-index.html"}];updateSearchResults();
