@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"top.expli.schoolfish"},{"l":"所有程序包","u":"allpackages-index.html"}];updateSearchResults();
+packageSearchIndex = [{"l":"top.expli.schoolfish"},{"l":"top.expli.schoolfish.exceptions"},{"l":"所有程序包","u":"allpackages-index.html"}];updateSearchResults();
