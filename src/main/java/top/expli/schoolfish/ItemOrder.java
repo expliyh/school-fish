@@ -59,7 +59,8 @@ public class ItemOrder implements Order {
     }
 
     /**
-     * @return The order's ID in string
+     * 获取字符串形式的订单号
+     * @return 字符串形式的订单号，最后的 @ 之后的数字代表订单类型
      */
     @Override
     public String getOrderID() {
