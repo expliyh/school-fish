@@ -21,6 +21,10 @@ public class ItemOrder implements Order {
     private int orderStatus;
 //    private ItemSnapshot itemSnapshot;
 
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     /**
      * Constructs an ItemOrder with the provided seller ID, buyer ID, item ID, and item snapshot.
      *
@@ -52,6 +56,14 @@ public class ItemOrder implements Order {
     @Override
     public String getSellerID() {
         return sellerID;
+    }
+
+    /**
+     * @return The order's ID in string
+     */
+    @Override
+    public String getOrderID() {
+        return String.valueOf(this.id) + String.format("@%d", OrderTypes.ITEM_ORDER);
     }
 
     /**

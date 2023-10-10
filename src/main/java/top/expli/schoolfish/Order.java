@@ -6,17 +6,22 @@ package top.expli.schoolfish;
 public interface Order {
     /**
      * Get seller's UserID.
-     * @author expliyh
+     *
      * @return Seller's ID
+     * @author expliyh
      * @since 0.0
      */
     String getSellerID();
+
     /**
      * Get buyer's UserID.
-     * @author expliyh
+     *
      * @return Buyer's ID
+     * @author expliyh
      * @since 0.0
      */
+    String getOrderID();
+
     String getBuyerID();
 
     String getItemID();
@@ -24,4 +29,6 @@ public interface Order {
     void getItemSnapshot();
 
     int getOrderStat();
+
+    void setOrderStatus(int orderStatus);
 }
