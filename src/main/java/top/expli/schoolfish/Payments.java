@@ -1,6 +1,9 @@
 package top.expli.schoolfish;
 
+import top.expli.schoolfish.exceptions.*;
+
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * 用于支付的工具类
@@ -10,11 +13,44 @@ public class Payments {
 
     /**
      * 发起支付。
+     *
      * @param orderID 本平台的订单号
      * @return 支付平台的订单号
      */
-    public String startPayment(String orderID){
+    public String startPayment(String orderID) {
         return "";
+    }
+
+    /**
+     * 处理支付回调的方法.
+     * @param platformID 支付平台的订单号
+     * @param sign 支付平台的签名
+     * @return 成功时返回 0
+     * @throws PaymentNotFound 当找不到支付订单时返回，可能是由于支付期间服务器重启或订单无效，应提醒客户联系客服
+     * @throws PaymentNotSign 订单签名错误，可能是恶意请求冒充正确的支付平台
+     * @throws IDFormatInvalid 支付订单保存的系统订单号无效
+     * @throws OrderNotFound 找不到系统订单号
+     * @throws InvalidPayment 支付订单无效，可能是由于订单不是待支付状态
+     */
+    public int pay(String platformID, String sign) throws PaymentNotFound, PaymentNotSign, IDFormatInvalid, OrderNotFound, InvalidPayment {
+        if (!payments.containsKey(platformID)) {
+            throw new PaymentNotFound();
+        }
+        Payment payment = payments.get(platformID);
+        if (!Objects.equals(sign, payment.getSign())) {
+            throw new PaymentNotSign("签名不正确");
+        }
+        Order order = Database.getOrder(payment.getOrderID());
+
+//        判断订单是否是待支付状态
+        if (order.getOrderStat() != OrderStats.PLACED) {
+            throw new InvalidPayment("订单不是待支付状态");
+        }
+
+//        修改订单状态并保存
+        order.setOrderStatus(OrderStats.PAID);
+        Database.updateOrder(order);
+        return 0;
     }
 }
 
@@ -43,6 +79,7 @@ class Payment {
 
     /**
      * 判断订单是否超时.
+     *
      * @return 订单是否超时，超时为 True，未超时为 False.
      */
     public boolean isTimedOut() {
@@ -59,9 +96,10 @@ class Payment {
 
     /**
      * 构造函数.s
+     *
      * @param platformID 支付平台的订单号.
-     * @param orderID 本平台的订单号.
-     * @param sign 支付平台签名，用于验证回调是否合法.
+     * @param orderID    本平台的订单号.
+     * @param sign       支付平台签名，用于验证回调是否合法.
      */
     public Payment(String platformID, String orderID, String sign) {
         this.platformID = platformID;
