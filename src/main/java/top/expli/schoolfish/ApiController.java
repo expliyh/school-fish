@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ApiController {
     @PostMapping("/api/place_order")
-    public String placeOrderController(@RequestParam String itemID, @RequestParam String buyerID, @RequestParam String sellerID, @RequestParam String token) {
+    public String placeOrderController(@RequestParam String itemID,
+                                       @RequestParam String buyerID,
+                                       @RequestParam String sellerID,
+                                       @RequestParam String token) {
 //        Token Verify Here
         return OrderManager.placeOrder(itemID, sellerID, buyerID);
     }
