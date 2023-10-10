@@ -1,7 +1,9 @@
 package top.expli.schoolfish;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -9,8 +11,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ApiController {
+    @PostMapping("/api/place_order")
+    public String placeOrderController(@RequestParam String itemID, @RequestParam String buyerID, @RequestParam String sellerID, @RequestParam String token) {
+//        Token Verify Here
+        return OrderManager.placeOrder(itemID, sellerID, buyerID);
+    }
+
     /**
      * 服务端程序测试路由，如果在运行就会返回 Hello, World!
+     *
      * @return 返回 Hello, World! 证明服务端程序正在运行
      */
     @RequestMapping({"/hello", "/ping"})
