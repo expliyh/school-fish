@@ -43,7 +43,7 @@ public class Payments {
         Order order = Database.getOrder(payment.getOrderID());
 
 //        判断订单是否是待支付状态
-        if (order.getOrderStat() != OrderStats.PLACED) {
+        if (order.getOrderStatus() != OrderStats.PLACED) {
             throw new InvalidPayment("订单不是待支付状态");
         }
 
