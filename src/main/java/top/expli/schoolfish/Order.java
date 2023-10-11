@@ -28,7 +28,14 @@ public interface Order {
 
     void getItemSnapshot();
 
-    int getOrderStat();
+    int getOrderStatus();
 
     void setOrderStatus(int orderStatus);
+
+    /**
+     * 检查订单支付情况.
+     * 底层使用 getOrderStatus
+     * @return 订单的支付情况，True为已支付、False为未支付
+     */
+    boolean isPaid();
 }
