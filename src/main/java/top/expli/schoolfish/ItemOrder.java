@@ -26,6 +26,29 @@ public class ItemOrder implements Order {
     }
 
     /**
+     * 检查订单支付情况.
+     * 底层使用 getOrderStatus
+     *
+     * @return 订单的支付情况，True为已支付、False为未支付
+     */
+    @Override
+    public boolean isPaid() {
+        switch (this.orderStatus){
+            case OrderStats.PLACED:
+            case OrderStats.CLOSED:
+                return false;
+            case OrderStats.PAID:
+            case OrderStats.SHIPPED:
+            case OrderStats.SIGNED:
+            case OrderStats.NOT_REVIEW:
+            case OrderStats.DONE:
+            case OrderStats.AFTER_SALE:
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Constructs an ItemOrder with the provided seller ID, buyer ID, item ID, and item snapshot.
      *
      * @param sellerID The seller's ID.
@@ -102,7 +125,7 @@ public class ItemOrder implements Order {
      * @return The order status.
      */
     @Override
-    public int getOrderStat() {
+    public int getOrderStatus() {
         return orderStatus;
     }
 }
