@@ -1,13 +1,32 @@
 package top.expli.schoolfish;
 
+import top.expli.schoolfish.exceptions.IDFormatInvalid;
+import top.expli.schoolfish.exceptions.OrderNotFound;
+
 /**
  * 用于返回Web请求的订单类，添加了文字形式的信息
  */
-public class OrderForDisplay
-{
+public class OrderForDisplay {
+    public OrderForDisplay(String orderId) throws IDFormatInvalid, OrderNotFound {
+        this.orderType = OrderManager.getOrderType(orderId);
+        switch (this.orderType){
+            case OrderTypes.ITEM_ORDER -> {
+                this.orderTypeStr="商品订单";
+                ItemOrder order= (ItemOrder) OrderManager.getOrder(orderId);
+                this.buyerId=order.getBuyerID();
+                this.sellerId=order.getSellerID();
+            }
+            case OrderTypes.RECHARGE -> {
+                this.orderTypeStr="充值";
+            }
+        }
+    }
+
     String itemName;
     String itemTypeStr;
     int itemType;
+    String orderTypeStr;
+    int orderType;
     String orderId;
     String buyerName;
     String buyerId;
