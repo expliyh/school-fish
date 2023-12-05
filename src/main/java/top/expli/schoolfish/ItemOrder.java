@@ -1,16 +1,23 @@
 package top.expli.schoolfish;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.Getter;
+
+import java.util.Date;
 
 /**
  * 常规物品的交易订单类.
  */
+@Data
 @Entity
 public class ItemOrder implements Order {
 
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,12 +25,19 @@ public class ItemOrder implements Order {
     private final String sellerID;
     private final String buyerID;
     private final String itemID;
+    private String itemName;
     private int orderStatus;
+    private double balance;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date payDate;
 //    private ItemSnapshot itemSnapshot;
 
     public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
     }
+
 
     /**
      * 检查订单支付情况.
@@ -33,7 +47,7 @@ public class ItemOrder implements Order {
      */
     @Override
     public boolean isPaid() {
-        switch (this.orderStatus){
+        switch (this.orderStatus) {
             case OrderStats.PLACED:
             case OrderStats.CLOSED:
                 return false;
@@ -48,6 +62,14 @@ public class ItemOrder implements Order {
         return false;
     }
 
+    public String getItemName() {
+        return this.itemName;
+    }
+
+    public double getBalance() {
+        return this.balance;
+    }
+
     /**
      * Constructs an ItemOrder with the provided seller ID, buyer ID, item ID, and item snapshot.
      *
@@ -56,12 +78,35 @@ public class ItemOrder implements Order {
      * @param itemID   The ID of the item in the order.
      *                 //     * @param itemSnapshot The snapshot of the ordered item.
      */
-    public ItemOrder(String sellerID, String buyerID, String itemID) {
+    public ItemOrder(String sellerID, String buyerID, String itemID, double balance, String itemName) {
         this.sellerID = sellerID;
         this.buyerID = buyerID;
         this.itemID = itemID;
 //        this.itemSnapshot = itemSnapshot;
         this.orderStatus = OrderStats.UNDEFINED;
+        this.balance = balance;
+        this.itemName = itemName;
+        this.createDate = new Date(System.currentTimeMillis());
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
     }
 
     protected ItemOrder() {
@@ -83,6 +128,7 @@ public class ItemOrder implements Order {
 
     /**
      * 获取字符串形式的订单号
+     *
      * @return 字符串形式的订单号，最后的 @ 之后的数字代表订单类型
      */
     @Override
