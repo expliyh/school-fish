@@ -25,7 +25,10 @@ public class OrderManager {
         String orderID = "";
         switch (itemType) {
             case 0 -> {
-                order = new ItemOrder(sellerID, buyerID, itemID);
+                //此处获取商品价格
+                double itemPrice = 0;
+                String itemName = "TestName";
+                order = new ItemOrder(sellerID, buyerID, itemID, itemPrice, itemName);
                 order.setOrderStatus(OrderStats.PLACED);
                 orderID = Database.addItemOrder((ItemOrder) order);
             }
@@ -36,6 +39,7 @@ public class OrderManager {
 
     /**
      * 根据订单号解析订单类型
+     *
      * @param orderID 字符串形式的订单号
      * @return 整型的订单类型
      * @throws IDFormatInvalid 订单号格式错误
@@ -57,10 +61,11 @@ public class OrderManager {
 
     /**
      * 根据订单号获取订单对象，只是重新打包了 Database.getOrder
+     *
      * @param orderId 字符串形式的订单号
      * @return 订单对象
      * @throws IDFormatInvalid 订单号格式错误
-     * @throws OrderNotFound 找不到订单
+     * @throws OrderNotFound   找不到订单
      */
     public static Order getOrder(String orderId) throws IDFormatInvalid, OrderNotFound {
         return Database.getOrder(orderId);
