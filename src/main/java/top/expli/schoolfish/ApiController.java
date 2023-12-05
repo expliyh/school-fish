@@ -57,15 +57,15 @@ public class ApiController {
         return OrderAPI.myOrder(token, page_count, per_page);
     }
 
-//    @PostMapping("/api/get_order")
-//    @ResponseBody
-//    @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
-//    public String getOrder(
-//            @RequestParam String token,
-//            @RequestParam String order_id
-//    ) {
-//
-//    }
+    @PostMapping("/api/get_order")
+    @ResponseBody
+    @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
+    public String getOrder(
+            @RequestParam String token,
+            @RequestParam String order_id
+    ) throws JsonProcessingException {
+        return OrderAPI.getOrder(order_id);
+    }
 
     @GetMapping("/mkorder")
     @ResponseBody

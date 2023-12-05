@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import top.expli.schoolfish.exceptions.IDFormatInvalid;
 import top.expli.schoolfish.exceptions.OrderNotFound;
@@ -105,11 +105,11 @@ public class Database {
         return "";
     }
 
-    public static Order getOrder(String orderID) throws IDFormatInvalid, OrderNotFound {
+    public static ItemOrder getOrder(String orderID) throws IDFormatInvalid, OrderNotFound {
         String pattern = "(.+)@(.+)";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(orderID);
-        Order order = null;
+        ItemOrder order = null;
         long rawOrderID = -1;
         int orderType = -1;
         if (m.find()) {
@@ -120,11 +120,7 @@ public class Database {
                 throw new IDFormatInvalid("无效的订单号");
             }
         }
-        switch (orderType) {
-            case OrderTypes.ITEM_ORDER -> {
-                order = itemOrderRepository.getReferenceById(rawOrderID);
-            }
-        }
+        order = itemOrderRepository.getOrderById(rawOrderID);
         if (order == null) {
             throw new OrderNotFound();
         }
@@ -132,6 +128,8 @@ public class Database {
     }
 }
 
+@Repository
 interface ItemOrderRepository extends JpaRepository<ItemOrder, Long> {
-
+    @Query("SELECT o FROM ItemOrder o WHERE o.id=?1")
+    ItemOrder getOrderById(Long id);
 }

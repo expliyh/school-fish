@@ -38,6 +38,16 @@ public class ItemOrder implements Order {
         this.orderStatus = orderStatus;
     }
 
+    public String getSellerName() {
+//      此处获取卖家用户名
+        return "测试卖家";
+    }
+
+    public String getBuyerName() {
+//      此处获取买家用户名
+        return "测试买家";
+    }
+
 
     /**
      * 检查订单支付情况.
