@@ -19,6 +19,7 @@ import top.expli.schoolfish.exceptions.IDFormatInvalid;
 import top.expli.schoolfish.exceptions.OrderNotFound;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,14 +64,22 @@ public class Database {
         return savedOrder.getOrderID();
     }
 
-    public static Page<ItemOrder> getItemOrderByPageAsAll(String uid, int page, int per_page) {
+    public static Page<ItemOrder> getItemOrderByPageAsAll(String uid, String filter, int page, int per_page) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ItemOrder> query = criteriaBuilder.createQuery(ItemOrder.class);
         Root<ItemOrder> root = query.from(ItemOrder.class);
-        Predicate condition = criteriaBuilder.or(
-                criteriaBuilder.equal(root.get("sellerID"), uid),
-                criteriaBuilder.equal(root.get("buyerID"), uid)
-        );
+        Predicate condition;
+        if (Objects.equals(filter, "as_buyer")) {
+            condition = criteriaBuilder.equal(root.get("buyerID"), uid);
+        } else if (Objects.equals(filter, "as_seller")) {
+            condition = criteriaBuilder.equal(root.get("sellerID"), uid);
+        } else {
+            condition = criteriaBuilder.or(
+                    criteriaBuilder.equal(root.get("sellerID"), uid),
+                    criteriaBuilder.equal(root.get("buyerID"), uid)
+            );
+        }
+
 
         query.where(condition);
 
@@ -126,10 +135,17 @@ public class Database {
         }
         return order;
     }
+
+    public static List<ItemOrder> getMyWaitForShip(String uid) {
+        return itemOrderRepository.getMyWaitForShip(uid);
+    }
 }
 
 @Repository
 interface ItemOrderRepository extends JpaRepository<ItemOrder, Long> {
     @Query("SELECT o FROM ItemOrder o WHERE o.id=?1")
     ItemOrder getOrderById(Long id);
+
+    @Query("SELECT o FROM ItemOrder o WHERE o.sellerID=?1 and o.orderStatus=1")
+    List<ItemOrder> getMyWaitForShip(String uid);
 }

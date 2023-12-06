@@ -3,7 +3,10 @@ package top.expli.schoolfish;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import top.expli.schoolfish.exceptions.IDFormatInvalid;
+import top.expli.schoolfish.exceptions.OrderNotFound;
 
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -41,7 +44,20 @@ public class ApiController {
                                        @RequestParam String sellerID,
                                        @RequestParam String token) {
 //        Token Verify Here
+//        此处判断商品能否下单
         return OrderManager.placeOrder(itemID, sellerID, buyerID);
+    }
+
+
+    @PostMapping("/api/confirm")
+    @ResponseBody
+    @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
+    public String confirm(
+            @RequestParam String token,
+            @RequestParam String order_id
+    ) throws JsonProcessingException {
+        //        Token Verify Here
+        return OrderAPI.confirm(token, order_id);
     }
 
     @PostMapping("/api/get_order_page")
@@ -49,12 +65,24 @@ public class ApiController {
     @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
     public String getOrderPage(
             @RequestParam String token,
+            @RequestParam String filter,
             @RequestParam int page_count,
             @RequestParam int per_page
     ) throws JsonProcessingException {
         System.out.println(token);
-        System.out.println(OrderAPI.myOrder(token, page_count, per_page));
-        return OrderAPI.myOrder(token, page_count, per_page);
+//        System.out.println(OrderAPI.myOrder(token, page_count, per_page));
+        return OrderAPI.myOrder(token, filter, page_count, per_page);
+    }
+
+    @PostMapping("/api/get_pay_link")
+    @ResponseBody
+    @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
+    public String getPayLink(
+            @RequestParam String token,
+            @RequestParam String order_id
+    ) throws JsonProcessingException {
+//        此处验证Token并获取UID
+        return OrderAPI.getPayLink("12345678", order_id);
     }
 
     @PostMapping("/api/get_order")
@@ -65,6 +93,54 @@ public class ApiController {
             @RequestParam String order_id
     ) throws JsonProcessingException {
         return OrderAPI.getOrder(order_id);
+    }
+
+    @PostMapping("/api/ship")
+    @ResponseBody
+    @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
+    public String ship(
+            @RequestParam String token,
+            @RequestParam String order_id,
+            @RequestParam String tracking_number
+    ) throws JsonProcessingException {
+        return OrderAPI.ship(token, order_id, tracking_number);
+    }
+
+
+    @PostMapping("/api/wait_for_ship")
+    @ResponseBody
+    @CrossOrigin(originPatterns = "*", allowCredentials = "true", maxAge = 3600)
+    public String waitForShip(
+            @RequestParam String token
+    ) throws JsonProcessingException {
+//        此处验证Token
+        return OrderAPI.getWaitForShip(token);
+    }
+
+    @GetMapping("/api/pay")
+    @ResponseBody
+    public String pay(
+            @RequestParam String token,
+            @RequestParam String order_id
+    ) {
+//        此处使用支付SDK验证请求合法性
+        ItemOrder order;
+
+        try {
+            order = Database.getOrder(order_id);
+            if (order.getOrderStatus() != 0) {
+                return "订单不能支付！";
+            } else {
+//                此处使用支付平台SDK生成支付链接
+                order.setOrderStatus(OrderStats.PAID);
+                Database.updateOrder(order);
+            }
+        } catch (IDFormatInvalid e) {
+            return "Invalid OrderId Format!";
+        } catch (OrderNotFound e) {
+            return "Order Not Found!";
+        }
+        return "Unknown";
     }
 
     @GetMapping("/mkorder")

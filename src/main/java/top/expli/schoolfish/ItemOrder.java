@@ -27,7 +27,29 @@ public class ItemOrder implements Order {
     private final String itemID;
     private String itemName;
     private int orderStatus;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public Date getPayDate() {
+        return payDate;
+    }
+
     private double balance;
+    private String trackingNumber;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
