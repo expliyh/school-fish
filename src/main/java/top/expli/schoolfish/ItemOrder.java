@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 常规物品的交易订单类.
@@ -70,6 +71,25 @@ public class ItemOrder implements Order {
         return "测试买家";
     }
 
+    public String waitForCancelID;
+
+    public String getCancelID() {
+        return waitForCancelID;
+    }
+
+    public void setCancelID(String waitForCancelID) {
+        this.waitForCancelID = waitForCancelID;
+    }
+
+    public String getWarrantyID() {
+        return waitForWarrantyID;
+    }
+
+    public void setWarrantyID(String waitForWarrantyID) {
+        this.waitForWarrantyID = waitForWarrantyID;
+    }
+
+    public String waitForWarrantyID;
 
     /**
      * 检查订单支付情况.

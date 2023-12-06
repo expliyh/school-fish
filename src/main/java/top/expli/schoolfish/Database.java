@@ -146,6 +146,6 @@ interface ItemOrderRepository extends JpaRepository<ItemOrder, Long> {
     @Query("SELECT o FROM ItemOrder o WHERE o.id=?1")
     ItemOrder getOrderById(Long id);
 
-    @Query("SELECT o FROM ItemOrder o WHERE o.sellerID=?1 and o.orderStatus=1")
+    @Query("SELECT o FROM ItemOrder o WHERE o.sellerID=?1 AND o.orderStatus=1")
     List<ItemOrder> getMyWaitForShip(String uid);
 }
